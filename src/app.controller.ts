@@ -13,7 +13,6 @@ class FileOptions {
 
 function getValidExtensions(): RegExp {
   const extensions = (process.env.VALID_EXTENSIONS || '.*').split(',').join('|');
-  console.log(process.env.VALID_EXTENSIONS);
   return new RegExp(`([a-z])+(${extensions})$`);
 }
 
@@ -27,6 +26,11 @@ export class AppController {
 
   @UseInterceptors(
     FileInterceptor('file', {
+      fileFilter: (req, file, cb) => {
+        // Known issue: Without using this filter, a file is uploaded even if the file extension is invalid. 
+        const isValidExtension = getValidExtensions().test(file.originalname);
+        cb(null, isValidExtension);
+      },
       storage: diskStorage({
         destination: `./${getDestPath()}`,
         filename(req, file, callback) {
