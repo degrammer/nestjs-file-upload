@@ -21,13 +21,16 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-# upload a file
+# Upload a file
+This middleware only handles multipart/form-data
 ```bash
 curl http://localhost:3000/file -F 'file=@./file.extension' -F 'name=test'
 ```
 
-### Valid extensions and destination folder are configured via env vars.
-### The **uploads** folder will be used by default, if no destination path is specified.
+# Configure valid file extensions
+Valid extensions and destination folder are configured via env vars.
+The **uploads** folder will be used by default, if no destination path is specified.
+The destination folder should be created beforehand (this is a requirement by the Multer library).
 ```bash
 DEST_PATH=./uploads VALID_EXTENSIONS=.pdf,.jpg,.png nest start
 ```
